@@ -1,6 +1,6 @@
-# 🕵️‍♂️ Job-Sweep: Market Intelligence for Modern Careers
+# 🕵️‍♂️ Intel-Sweep: Market Intelligence for Modern Careers
 
-Welcome to **Job-Sweep**, a data-driven market intelligence platform that scrapes and analyzes tech job trends from across the web — including company career sites, Indeed, and GitHub — to help job seekers, tech professionals, and analysts spot what’s hot in the hiring world.
+Welcome to **Intel-Sweep**, a data-driven market intelligence platform that scrapes and analyzes tech job trends from across the web — including company career sites, Indeed, and GitHub — to help job seekers, tech professionals, and analysts spot what’s hot in the hiring world.
 
 > _"Don't just look for a job. Understand the job market."_  
 
@@ -8,7 +8,7 @@ Welcome to **Job-Sweep**, a data-driven market intelligence platform that scrape
 
 ## 🚀 Project Vision
 
-**Job-Sweep** aims to become a powerful tool for discovering where the hiring energy is — which companies are expanding, what roles are in demand, which skills keep appearing, and where opportunities are heating up.
+**Intel-Sweep** aims to become a powerful tool for discovering where the hiring energy is — which companies are expanding, what roles are in demand, which skills keep appearing, and where opportunities are heating up.
 
 ---
 
@@ -80,4 +80,4 @@ Open an issue or ping me with your ideas. Collaboration welcomed!
 ---
 
 > _Built to decode the job market, one scraped posting at a time._  
-> **— Job-Sweep**
+> **— Intel-Sweep**
