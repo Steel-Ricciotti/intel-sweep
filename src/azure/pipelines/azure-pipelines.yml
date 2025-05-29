@@ -1,0 +1,53 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.10'
+
+- script: |
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    databricks fs cp -r src dbfs:/FileStore/src
+    databricks fs cp -r data dbfs:/FileStore/data
+  displayName: 'Upload files to Databricks'
+  env:
+    DATABRICKS_HOST: $(DATABRICKS_HOST)
+    DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+
+- script: |
+    python src/data/etl-economic-indicators.py
+    python src/data/etl-stocks.py
+    python src/models/train_xgboost.py
+    python src/models/train_pytorch.py
+
+  displayName: 'Run training scripts'
+  env:
+    MLFLOW_TRACKING_URI: databricks
+    DATABRICKS_HOST: $(DATABRICKS_HOST)
+    DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+    
+- script: |
+    python src/monitoring/drift_detection.py
+    python src/monitoring/model_monitoring.py
+  displayName: 'Run monitoring'
+  env:
+    MLFLOW_TRACKING_URI: databricks
+    DATABRICKS_HOST: $(DATABRICKS_HOST)
+    DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)    
+
+- script: |
+    python deploy_model.py
+  displayName: 'Deploy best model'
+  env:
+    MLFLOW_TRACKING_URI: databricks
+    DATABRICKS_HOST: $(DATABRICKS_HOST)
+    DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)

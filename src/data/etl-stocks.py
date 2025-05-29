@@ -1,82 +1,112 @@
-0import pandas as pd
-import yfinance as yf
-import logging
 import os
 import time
+import logging
 from pathlib import Path
-from retry import retry
+import pandas as pd
+import yfinance as yf
+from tenacity import retry, stop_after_attempt, wait_exponential
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-
-class StockDataFetcher:
-    """Fetches stock data from Yahoo Finance and saves as CSV files."""
-
-    def __init__(self, tickers, output_dir="data/stocks", start_date="2015-03-15", end_date="2017-05-15"):
+class YFinanceStockFetcher:
+    def __init__(self, tickers, output_dir="yf_monthly"):
         """
-        Initialize the stock data fetcher.
-
         Args:
-            tickers (list): List of stock ticker symbols.
+            tickers (list[str]): List of ticker symbols.
             output_dir (str): Directory to save CSV files.
-            start_date (str): Start date for data (YYYY-MM-DD).
-            end_date (str): End date for data (YYYY-MM-DD).
         """
         self.tickers = tickers
-        self.output_dir = output_dir
-        self.start_date = start_date
-        self.end_date = end_date
-        os.makedirs(self.output_dir, exist_ok=True)
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
 
-    @retry(tries=3, delay=1, backoff=2, exceptions=(Exception,))
-    def fetch_stock(self, ticker):
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=4))
+    def fetch_monthly_data(self, ticker):
         """
-        Fetch data for a single stock ticker.
-
-        Args:
-            ticker (str): Stock ticker symbol.
-
-        Returns:
-            pd.DataFrame: DataFrame with stock data, or None if failed.
+        Fetch monthly adjusted stock data from yfinance.
         """
-        try:
-            stock = yf.Ticker(ticker)
-            df = stock.history(start=self.start_date, end=self.end_date, interval="1d")
-            if df.empty:
-                logger.warning(f"No data returned for {ticker}")
-                return None
-            # Reset index to make 'Date' a column
-            df = stock.history()['Close']
-            # Select and rename columns to match original format
-            df = df[['Date', 'High', 'Low', 'Close', 'Volume', 'Adj Close']]
-            df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y%m%d')
-            df = df.round(4)
-            logger.info(f"Fetched data for {ticker}")
-            return df
-        except Exception as e:
-            logger.error(f"Error fetching {ticker}: {e}")
-            return None
+        logger.info(f"Fetching monthly data for {ticker}")
+        # Use yfinance download with monthly interval
+        data = yf.download(ticker, period="max", interval="1mo", auto_adjust=True, progress=False)
+        if data.empty:
+            raise ValueError(f"No data returned for {ticker}")
+
+        # Reset and rename columns for consistency with Alpha Vantage
+        data.reset_index(inplace=True)
+        data.rename(columns={
+            'Date': 'Date',
+            'Open': 'Open',
+            'High': 'High',
+            'Low': 'Low',
+            'Close': 'Close',
+            'Volume': 'Volume'
+        }, inplace=True)
+        # Add 'Adj Close' (already adjusted due to auto_adjust=True)
+        data['Adj Close'] = data['Close']
+
+        # Keep relevant columns
+        data = data[['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']]
+        data['Date'] = pd.to_datetime(data['Date']).dt.strftime('%Y-%m-%d')
+        data = data.sort_values('Date')
+        data = data.round(4)
+        return data
 
     def run(self):
-        """Fetch and save data for all tickers as individual CSV files."""
-        failed_tickers = []
+        failed = []
         for ticker in self.tickers:
-            df = self.fetch_stock(ticker)
-            if df is not None:
-                output_file = os.path.join(self.output_dir, f"{ticker.lower()}.csv")
+            try:
+                df = self.fetch_monthly_data(ticker)
+                output_file = self.output_dir / f"{ticker.upper()}_monthly.csv"
                 df.to_csv(output_file, index=False)
-                logger.info(f"Saved {ticker} to {output_file}")
-            else:
-                failed_tickers.append(ticker)
-            time.sleep(0.5)  # Rate limiting
-        if failed_tickers:
-            logger.warning(f"Failed tickers: {failed_tickers}")
+                logger.info(f"Saved data to {output_file}")
+            except Exception as e:
+                logger.error(f"Error fetching {ticker}: {e}")
+                failed.append(ticker)
+            time.sleep(1)  # Avoid yfinance rate-limiting
+        if failed:
+            logger.warning(f"Failed tickers: {failed}")
+            return failed
+        return []
 
+def get_sp500_tickers(csv_path=None):
+    """
+    Fetch S&P 500 tickers from CSV or Wikipedia.
+    Args:
+        csv_path (str): Path to CSV file with 'Symbol' column (optional).
+    Returns:
+        list: List of ticker symbols.
+    """
+    if csv_path and os.path.exists(csv_path):
+        try:
+            df = pd.read_csv(csv_path)
+            tickers = df['Symbol'].tolist()
+            logger.info(f"Loaded {len(tickers)} tickers from {csv_path}")
+            return [ticker.replace('.', '-') for ticker in tickers]
+        except Exception as e:
+            logger.error(f"Error reading CSV {csv_path}: {e}")
+    try:
+        url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+        tables = pd.read_html(url)
+        sp500_table = tables[0]
+        tickers = sp500_table['Symbol'].tolist()
+        logger.info(f"Loaded {len(tickers)} S&P 500 tickers from Wikipedia")
+        return [ticker.replace('.', '-') for ticker in tickers]
+    except Exception as e:
+        logger.error(f"Error fetching S&P 500 tickers: {e}")
+        return []
 
 if __name__ == "__main__":
-    # Subset of tickers for testing (some may be delisted)
-    TICKERS = ['MSFT']
-    fetcher = StockDataFetcher(TICKERS)
-    fetcher.run()
+    # Path to your CSV file with S&P 500 tickers
+    CSV_PATH = "C:/Users/Steel/Desktop/Projects/intel-sweep/intel-sweep/src/data/heavy-stocks.csv"
+    TICKERS = get_sp500_tickers(CSV_PATH)
+    csv_path = "C:/Users/Steel/Desktop/Projects/intel-sweep/intel-sweep/src/data/heavy-stocks.csv"
+    df_symbols = pd.read_csv(csv_path)
+    symbols = df_symbols['Symbol'].dropna().unique().tolist()
+
+    if not TICKERS:
+        logger.error("No tickers loaded. Exiting.")
+        exit()
+
+    fetcher = YFinanceStockFetcher(tickers=symbols)
+    failed_tickers = fetcher.run()

@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Data files
+/data/processed/
+/fred_economic_indicators/
+/yf_monthly/
+*.csv
+*.parquet
+*.delta
+
+# Logs
+*.log
+etl/data_pipeline.log
+
+# Environment and secrets
+.env
+*.key
+*.secret
+
+# MLflow tracking
+/mlflow_tracking/
+mlruns/
+
+# Databricks artifacts
+.dbc
+*.dbc
+
+# IDE and OS files
+.vscode/
+.idea/
+*.DS_Store
+*.swp
+
+# Temporary files
+*.tmp
+*.bak
