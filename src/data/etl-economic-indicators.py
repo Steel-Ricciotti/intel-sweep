@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 class FREDDataFetcher:
     """Fetches and processes FRED economic data for storage."""
 
-    def __init__(self, api_key, series_file, output_path="data/processed/fred_economic_indicators", batch_size=50):
+    def __init__(self, api_key, series_file, output_path="data/processed/fred_economic_indicators", batch_size=1):
         """
         Initialize the FRED data fetcher.
 
@@ -77,7 +77,7 @@ class FREDDataFetcher:
             logger.error(f"Error fetching {series_id}: {e}")
             raise
 
-    def fetch_batch(self, series_ids, start_date="2015-01-01"):
+    def fetch_batch(self, series_ids, start_date="2000-01-01"):
         """
         Fetch data for a batch of series IDs synchronously.
 
@@ -117,7 +117,7 @@ class FREDDataFetcher:
                 raise ValueError("Missing 'File' column in Months.csv")
             series_ids = series_df["File"].tolist()
             # Clean series IDs: remove '0\' prefix and '.csv' suffix
-            series_ids = [item.replace('0\\', '').split(".csv")[0] for item in series_ids]
+            series_ids = [item.split("\\")[-1].split(".csv")[0] for item in series_ids]
             logger.info(f"Extracted series IDs: {series_ids}")
             series_ids = series_ids[start:end]
         except Exception as e:
@@ -129,6 +129,10 @@ class FREDDataFetcher:
             result_df = self.fetch_batch(batch_ids)
             if result_df is not None:
                 result_df = result_df.dropna(how="all", subset=result_df.columns[1:])
+                df = result_df.set_index("date", inplace=True)
+                df_monthly = df.resample("MS").mean()
+                # Optional: reset index if needed
+                result_df = df_monthly.reset_index(inplace=True)
                 output_file = f"{self.output_path}/batch_{start + i}_{start + i + len(batch_ids)}"
 
                 try:
@@ -172,6 +176,6 @@ if __name__ == "__main__":
     API_KEY = "17188a6953269ab608ba14c3e3d8fb02"  # Your FRED API key
     SERIES_FILE = "Months.csv"
     #OUTPUT_PATH = "data/processed/fred_economic_indicators" if not IS_DATABRICKS else "/mnt/fred_data"
-    OUTPUT_PATH = "/Users/steelricciotti/PycharmProjects/PythonProject" if not IS_DATABRICKS else "/mnt/fred_data"
+    OUTPUT_PATH = "data/processed/fred_economic_indicators" if not IS_DATABRICKS else "/mnt/fred_data"
     fetcher = FREDDataFetcher(API_KEY, SERIES_FILE, OUTPUT_PATH)
     fetcher.run_etl()
