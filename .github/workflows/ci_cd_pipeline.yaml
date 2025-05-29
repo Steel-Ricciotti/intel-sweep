@@ -35,5 +35,5 @@ jobs:
 
       - name: Copy configuration files to DBFS
         run: |
-          databricks fs cp data/heavy-indicators2.csv dbfs:/FileStore/heavy-indicators2.csv --overwrite
-          databricks fs cp data/heavy-stocks.csv dbfs:/FileStore/heavy-stocks.csv --overwrite
+          databricks fs cp data/equities.csv dbfs:/FileStore/equitues.csv --overwrite
+          databricks fs cp data/stocks.csv dbfs:/FileStore/stocks.csv --overwrite
