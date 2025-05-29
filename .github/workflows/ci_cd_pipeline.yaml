@@ -31,7 +31,7 @@ jobs:
 
       - name: Deploy code to Databricks
         run: |
-          databricks workspace import_dir . /Repos/ricciots@uwindsor.ca/stock-predictor --overwrite
+          databricks workspace import_dir . /Repos/ricciots@uwindsor.ca/intel-sweep --overwrite
 
       - name: Copy configuration files to DBFS
         run: |
