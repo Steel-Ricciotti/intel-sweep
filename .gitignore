@@ -10,12 +10,11 @@ venv/
 *.egg-info/
 dist/
 build/
-
+.env
 # Data files
 /data/processed/
 /fred_economic_indicators/
 /yf_monthly/
-*.csv
 *.parquet
 *.delta
 
