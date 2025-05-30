@@ -36,4 +36,4 @@ jobs:
       - name: Copy configuration files to DBFS
         run: |
           databricks fs cp src/data/equities.csv dbfs:/FileStore/equitus.csv --overwrite
-          databricks fs cp src/data/stocks.csv dbfs:/FileStore/stocks.csv --overwrite
+          databricks fs cp src/data/indicators.csv dbfs:/FileStore/indicators.csv --overwrite
