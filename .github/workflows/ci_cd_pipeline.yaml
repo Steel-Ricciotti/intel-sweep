@@ -31,9 +31,10 @@ jobs:
 
       - name: Deploy code to Databricks
         run: |
-          databricks workspace import_dir . /Repos/ricciots@uwindsor.ca/intel-sweep --overwrite
+          databricks workspace import_dir ./src /Repos/ricciots@uwindsor.ca/intel-sweep --overwrite
 
       - name: Copy configuration files to DBFS
         run: |
           databricks fs cp data/equities.csv dbfs:/FileStore/equitues.csv --overwrite
+          databricks fs cp data/stocks.csv dbfs:/FileStore/stocks.csv --overwrite
           databricks fs cp data/stocks.csv dbfs:/FileStore/stocks.csv --overwrite
