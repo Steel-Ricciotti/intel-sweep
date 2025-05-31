@@ -12,9 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List repo contents
+      - name: List everything in repo
         run: |
-          ls -R intel-sweep
+          echo "Current working directory:"
+          pwd
+          echo "Top-level contents:"
+          ls -la
+          echo "Recursive contents:"
+          find . -type f
 
       - name: Set up Python
         uses: actions/setup-python@v4
