@@ -9,12 +9,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug source directory
-        run: |
-          echo "Contents of src:"
-          find src    
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: List repo contents
+        run: |
+          ls -R intel-sweep
 
       - name: Set up Python
         uses: actions/setup-python@v4
