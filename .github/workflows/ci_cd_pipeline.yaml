@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Debug source directory
         run: |
-          echo "Contents of ./src:"
-          find ./src    
+          echo "Contents of src:"
+          find src    
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -35,7 +35,7 @@ jobs:
 
       - name: Deploy code to Databricks
         run: |
-          databricks workspace import_dir ./src /Repos/ricciots@uwindsor.ca/intel-sweep --overwrite
+          databricks workspace import_dir src /Repos/ricciots@uwindsor.ca/intel-sweep --overwrite
 
       - name: Copy configuration files to DBFS
         run: |
