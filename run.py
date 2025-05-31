@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # In[25]:
-test
+#test
 from cassandra.cluster import Cluster
 
 cluster = Cluster()
