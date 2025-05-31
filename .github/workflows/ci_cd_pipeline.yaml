@@ -16,16 +16,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: src-code
-          path: src/
-          
-      - name: List everything in repo
-        run: |
-          echo "Current working directory:"
-          pwd
-          echo "Top-level contents:"
-          ls -la
-          echo "Recursive contents:"
-          find . -type f
+          path: src/classes/
 
       - name: Set up Python
         uses: actions/setup-python@v4
