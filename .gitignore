@@ -17,7 +17,7 @@ build/
 /yf_monthly/
 *.parquet
 *.delta
-
+*.csv
 # Logs
 *.log
 etl/data_pipeline.log
