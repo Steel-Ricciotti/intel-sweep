@@ -97,7 +97,7 @@ Each experiment is tracked in MLflow with dedicated paths and visualized via cus
 
 ## 🎥 Demo Video
 
-Watch the [[demo video](https://www.loom.com/share/3359640462f7432c9498dd26b6f95a0c)] to see the pipeline in action! From fetching FRED and Yahoo Finance data to training models and rendering Dash dashboards, it’s an end-to-end showcase of predictive ML in action.
+Watch the [[demo video](https://www.loom.com/share/beb22505f35e4589bea24b336e72f974)] to see the pipeline in action! From fetching FRED and Yahoo Finance data to training models and rendering Dash dashboards, it’s an end-to-end showcase of predictive ML in action.
 
 ## 📝 License
 
