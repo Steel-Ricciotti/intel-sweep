@@ -33,6 +33,7 @@ class StockPriceLSTM(nn.Module):
         self.num_layers = num_layers
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
         self.fc = nn.Linear(hidden_size, 1)
+        mlflow.set_tracking_uri("http://localhost:5000")
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass through LSTM."""
@@ -192,6 +193,7 @@ class Models:
         Returns:
             Tuple: (model, metrics_dict, backtest_df) or (None, None, None) on failure.
         """
+        print(mlflow.get_tracking_uri())
         logger.info(f"Starting training for {target_col}, horizon {horizon}")
         if params is None:
             params = {'hidden_size': 128, 'epochs': 200, 'learning_rate': 0.0005, 'batch_size': 128}

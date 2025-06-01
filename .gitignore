@@ -34,7 +34,7 @@ mlruns/
 # Databricks artifacts
 .dbc
 *.dbc
-
+.mlruns/
 # IDE and OS files
 .vscode/
 .idea/
