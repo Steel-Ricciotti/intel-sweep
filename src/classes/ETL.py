@@ -65,7 +65,7 @@ class ETL:
         data = data.set_index('Date').loc[~data.index.duplicated(keep='first')]
         return data.dropna()
 
-    def get_indicator_data(series_id, start_date="2010-01-01", end_date="2025-04-30", api_key="17188a6953269ab608ba14c3e3d8fb02"):
+    def get_indicator_data(series_id, start_date="2010-01-01", end_date="2025-04-30", api_key=api_key):
         """Fetch FRED indicator data."""
         output_dir = Path("C:/Users/Steel/Desktop/Projects/intel-sweep/intel-sweep/src/data/fred_economic_indicators")
         output_dir.mkdir(parents=True, exist_ok=True)
