@@ -48,10 +48,10 @@ Intel-Sweep aims to forecast stock and asset prices (e.g., DE, CAT, EMR, BTC-USD
 The project runs eight experiments, each focusing on a macroeconomic indicator and related assets:
 
 1. **AWHMAN**: Predicts industrial stocks (DE, CAT, EMR) using manufacturing hours.
-2. **M2SL**: Forecasts crypto and commodities (BTC-USD, GLD, SLV) with money supply.
+2. **PERMIT1**: Forecasts the homebuilder ETF EXB against new housing starts.
 3. **CPI**: Models real estate (VNQ) based on inflation.
 4. **UNRATE**: Predicts consumer discretionary (XLY) using unemployment data.
-5. **Bitcoin/Gold** Predicts the price of gold based on M2/Money Supply
+5. **M2** Predicts the price of gold based on M2/Money Supply
 6. **S&P500** Predicts future S&P500 prices based on an ensemble of indicators.
 7. **Oil** Predicts the performance of key oil companies based on oil prices.
 8. **Banks** Predicts the performance of several bank stocks based on interest rates and yield curves.
@@ -81,15 +81,15 @@ Each experiment is tracked in MLflow with dedicated paths and visualized via cus
    git clone https://github.com/your-username/intel-sweep.git
    ```
 2. **Set Up Databricks**:
-   - Import notebooks (`workweek_industrials.py`, `m2_equities_workflow.py`, etc.).
+   - Import notebooks (`workweek_industrials.py`, `indicators-S&P500-exploration.ipynb`, etc.).
    - Configure DBFS paths and MLflow tracking.
 3. **Install Dependencies**:
    ```python
    %pip install pandas numpy scikit-learn tensorflow xgboost fredapi yfinance dash plotly mlflow
    ```
 4. **Run Experiments**:
-   - Execute scripts like `workweek_industrials.py` to generate Delta tables and plots.
-   - Use `render_awhman_dashboard.py` to launch Dash apps.
+   - Execute scripts like `cpi-realestate.py` to generate Delta tables and plots.
+   - Dash apps launch automatically with all experiments.
 5. **Explore Outputs**:
    - View HTML plots in `/FileStore/outputs/`.
    - Check metrics in MLflow or `metrics_summary.csv`.
