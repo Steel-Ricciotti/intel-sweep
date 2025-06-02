@@ -80,7 +80,7 @@ Each experiment is tracked in MLflow with dedicated paths and visualized via cus
 
 1. **Clone the Repo**:
    ```bash
-   git clone https://github.com/your-username/intel-sweep.git
+   git clone https://github.com/Steel-Ricciotti/intel-sweep.git
    ```
 2. **Set Up Databricks**:
    - Import notebooks (`workweek_industrials.py`, `indicators-S&P500-exploration.ipynb`, etc.).
