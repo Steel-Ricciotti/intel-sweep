@@ -4,6 +4,8 @@
 
 Welcome to **Intel-Sweep**, a cutting-edge machine learning pipeline that predicts stock prices using macroeconomic indicators from FRED and financial data from Yahoo Finance. Built on Azure Databricks, this project leverages MLflow, Spark, and Dash to deliver robust forecasting models, interactive dashboards, and professional-grade visualizations. Whether you're a data scientist or a finance enthusiast, this repo showcases an end-to-end ML workflow with real-world impact. 🎥 *Check out the demo video for a live walkthrough!*
 
+https://www.loom.com/share/beb22505f35e4589bea24b336e72f974
+
 ## 🎯 Project Overview
 
 Intel-Sweep aims to forecast stock and asset prices (e.g., DE, CAT, EMR, BTC-USD, GLD, VNQ, XLY) by modeling their relationship with macroeconomic indicators like Average Weekly Hours of Manufacturing (AWHMAN), M2 Money Supply (M2SL), Consumer Price Index (CPI), and Unemployment Rate (UNRATE). Using advanced ML models (LSTM, XGBoost, LinearRegression), we generate trading signals, evaluate performance with metrics (R², RMSE, MAE), and visualize results through interactive Dash dashboards and Plotly HTML plots.
@@ -95,9 +97,6 @@ Each experiment is tracked in MLflow with dedicated paths and visualized via cus
    - Check metrics in MLflow or `metrics_summary.csv`.
    - Interact with Dash dashboards for each experiment.
 
-## 🎥 Demo Video
-
-Watch the [[demo video](https://www.loom.com/share/beb22505f35e4589bea24b336e72f974)] to see the pipeline in action! From fetching FRED and Yahoo Finance data to training models and rendering Dash dashboards, it’s an end-to-end showcase of predictive ML in action.
 
 ## 📝 License
 
