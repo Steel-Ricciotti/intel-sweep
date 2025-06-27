@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue) ![Databricks](https://img.shields.io/badge/Azure%20Databricks-9.1-red) ![MLflow](https://img.shields.io/badge/MLflow-2.0%2B-orange) ![License](https://img.shields.io/badge/License-MIT-green)
 
-Welcome to **Intel-Sweep**, a cutting-edge machine learning pipeline that predicts stock prices using macroeconomic indicators from FRED and financial data from Yahoo Finance. Built on Azure Databricks, this project leverages MLflow, Spark, and Dash to deliver robust forecasting models, interactive dashboards, and professional-grade visualizations. Whether you're a data scientist or a finance enthusiast, this repo showcases an end-to-end ML workflow with real-world impact. 🎥 *Check out the demo video for a live walkthrough!*
+Welcome to intel-sweep, a cutting-edge machine learning pipeline that predicts stock prices using macroeconomic indicators from FRED and financial data from Yahoo Finance. Built on Azure Databricks, this project leverages MLflow, Spark, and Dash to deliver robust forecasting models, interactive dashboards, and professional-grade visualizations. Whether you're a data scientist or a finance enthusiast, this repo showcases an end-to-end ML workflow with real-world impact. 🎥 *Check out the demo video for a live walkthrough!*
 
 
 [Watch the demo](https://www.loom.com/share/beb22505f35e4589bea24b336e72f974)
